@@ -10,7 +10,6 @@ const App = () => {
   //const BACKEND_URL = Config.BACKEND_URL;
   const [showCamera, setShowCamera] = useState(false);
 
-
   async function fetchData() {
     try {
       const response = await fetch('http://localhost:3007/google/generateContent', {
