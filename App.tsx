@@ -1,31 +1,45 @@
 import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, StatusBar, TextInput, Button, View } from 'react-native';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import Config from 'react-native-config';
 
 const App = () => {
 
   const [inputText, setInputText] = useState('');
   const [response, setResponse] = useState('');
-  const API_KEY = Config.API_KEY;
+  //const BACKEND_URL = Config.BACKEND_URL;
 
   async function fetchData() {
     try {
-      const genAI = new GoogleGenerativeAI(API_KEY);
-      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-      const results = await model.generateContent(inputText);
-      console.log("RESULTS: ", results);
-      const response = results.response;
-      console.log("RESPONSE: ", response);
-      const text = response.text();
-      console.log("TEXT: \n", text);
-      setResponse(text);
-    }
-    catch (error) {
-      setResponse("ERROR, try again");
-      console.log("ERROR: ", error);
+      const response = await fetch('http://localhost:3007/google/generateContent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: inputText }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      let textContent = '';
+      if (data && data.response && data.response.candidates && data.response.candidates.length > 0 &&
+        data.response.candidates[0].content && data.response.candidates[0].content.parts &&
+        data.response.candidates[0].content.parts.length > 0 && data.response.candidates[0].content.parts[0].text) {
+
+        textContent = data.response.candidates[0].content.parts[0].text;
+        setResponse(textContent);
+
+      } else {
+        console.error("Invalid or missing text content in response", data);
+      }
+    } catch (error) {
+      console.error("ERROR: ", error);
     }
   }
+
 
   return (
     <>
