@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, StatusBar, TextInput, Button, View } from 'react-native';
-import Config from 'react-native-config';
+//import Config from 'react-native-config';
 
 const App = () => {
 
