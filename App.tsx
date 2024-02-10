@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, StatusBar, TextInput, Button, View } from 'react-native';
 //import Config from 'react-native-config';
+import CameraScreen from './component/Camera';
 
 const App = () => {
 
   const [inputText, setInputText] = useState('');
   const [response, setResponse] = useState('');
   //const BACKEND_URL = Config.BACKEND_URL;
+  const [showCamera, setShowCamera] = useState(false);
+
 
   async function fetchData() {
     try {
@@ -40,25 +43,26 @@ const App = () => {
     }
   }
 
-
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.welcomeText}>Hello, React Native!</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter text"
-          value={inputText}
-          onChangeText={setInputText}
-        />
+      {showCamera ? (<CameraScreen />)
+        : (<SafeAreaView style={styles.container}>
+          <Text style={styles.welcomeText}>Hello, React Native!</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter text"
+            value={inputText}
+            onChangeText={setInputText}
+          />
 
-        <Button title="Search" onPress={fetchData} />
+          <Button title="Search" onPress={fetchData} />
 
-        <View style={styles.outputContainer}>
-          <Text style={styles.outputText}>{response}</Text>
-        </View>
-      </SafeAreaView>
+          <View style={styles.outputContainer}>
+            <Text style={styles.outputText}>{response}</Text>
+          </View>
+          <Button title="Toggle Camera" onPress={() => setShowCamera(!showCamera)} />
+        </SafeAreaView>)}
     </>
   );
 };
