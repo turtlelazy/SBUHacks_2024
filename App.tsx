@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, StatusBar, TextInput, Button, View } from 'react-native';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-//import Config from 'react-native-config';
+import Config from 'react-native-config';
 
 const App = () => {
 
   const [inputText, setInputText] = useState('');
   const [response, setResponse] = useState('');
-  const API_KEY = "poopy";
+  const API_KEY = Config.API_KEY;
 
   async function fetchData() {
     try {
